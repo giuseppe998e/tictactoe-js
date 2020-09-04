@@ -3,6 +3,6 @@
 
 This script uses the MiniMax algorithm to calculate the moves of the computer, it is practically impossible to beat it.
 
-Minified versions of the codes are available in the "example" folder.<br>
+Minified version of the code is available in the "example" folder.<br>
 
 P.S. :: *At the moment, the only implemented "difficulty" is the "impossible" one.*
