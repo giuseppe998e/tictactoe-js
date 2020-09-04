@@ -41,12 +41,12 @@
 
   <script src="tictactoe.min.js"></script>
   <script>
-    const ttt = new TicTacToe('#ttt-game');
-    ttt.setWinListener(p => alert(`Player "${p}" WINS!`));
-    ttt.setDrawListener(() => alert('Draw!'));
+    const ttt = TicTacToe('#ttt-game');
+    ttt.setWinHandler(p => alert(`Player "${p}" WINS!`));
+    ttt.setDrawHandler(() => alert('Draw!'));
 
     const points = document.getElementById('points');
-    ttt.setPointsListener((h, c) => {
+    ttt.setPointsHandler((h, c) => {
       points.innerText = `H ${h} : ${c} C`;
     });
     

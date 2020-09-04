@@ -21,6 +21,8 @@ const TicTacToe = function(boardId) {
   // ---------------------------------------------
   // Private Constants
   // ---------------------------------------------
+  const INSTANCE = {}
+
   const WIN_CONDITIONS = [[0, 1, 2], [0, 3, 6], [0, 4, 8], [1, 4, 7], [2, 4, 6], [2, 5, 8], [3, 4, 5], [6, 7, 8]]
 
   const PLAYER = {
@@ -48,9 +50,9 @@ const TicTacToe = function(boardId) {
   let difficulty = 2 // 0 = Easy, 1 = Normal, 2 = Impossible
   let playerTurn = PLAYER.Human
 
-  let winListener = null
-  let drawListener = null
-  let pointsListener = null
+  let winHandler = null
+  let drawHandler = null
+  let pointsHandler = null
 
   // ---------------------------------------------
   // Private Methods
@@ -71,24 +73,24 @@ const TicTacToe = function(boardId) {
           computerWins += 1
         }
     
-        if (typeof winListener == 'function') {
-          winListener(playerTurn == PLAYER.Human ? 'Human' : 'Computer')
+        if (typeof winHandler == 'function') {
+          winHandler(playerTurn == PLAYER.Human ? 'Human' : 'Computer')
         }
     
-        if (typeof pointsListener == 'function') {
-          pointsListener(humanWins, computerWins)
+        if (typeof pointsHandler == 'function') {
+          pointsHandler(humanWins, computerWins)
         }
       }
 
       else if (isDraw) {
         console.log('DRAW!')
 
-        if (typeof drawListener == 'function') {
-          drawListener()
+        if (typeof drawHandler == 'function') {
+          drawHandler()
         }
       }
       
-      setTimeout(() => this.init(), 350)
+      setTimeout(() => INSTANCE.init(), 350)
       return true
     }
 
@@ -248,7 +250,7 @@ const TicTacToe = function(boardId) {
   // ---------------------------------------------
   // Public Methods
   // ---------------------------------------------
-  this.init = () => {
+  INSTANCE.init = () => {
     // Reset Board state
     boardState = Array(9).fill(PLAYER.Blank)
 
@@ -262,7 +264,7 @@ const TicTacToe = function(boardId) {
     }
   }
 
-  this.setDifficulty = d => {
+  INSTANCE.setDifficulty = d => {
     if (isNaN(d)) {
       console.error(`"${d}" is not a number!`)
     }
@@ -272,21 +274,21 @@ const TicTacToe = function(boardId) {
     }
 
     difficulty = d
-    this.init()
+    INSTANCE.init()
   }
 
-  this.setWinListener = fn => {
-    winListener = fn
+  INSTANCE.setWinHandler = fn => {
+    winHandler = fn
     return this
   }
 
-  this.setDrawListener = fn => {
-    drawListener = fn
+  INSTANCE.setDrawHandler = fn => {
+    drawHandler = fn
     return this
   }
 
-  this.setPointsListener = fn => {
-    pointsListener = fn
+  INSTANCE.setPointsHandler = fn => {
+    pointsHandler = fn
     return this
   }
 
@@ -303,8 +305,10 @@ const TicTacToe = function(boardId) {
           }
         }
       }
-    })
+    }, false)
   })
 
-  this.init() // Start Match
+  INSTANCE.init() // Start Match
+
+  return INSTANCE;
 }
