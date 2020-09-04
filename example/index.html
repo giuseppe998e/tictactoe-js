@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TicTacToe</title>
+  <link rel="stylesheet" href="tictactoe.min.css">
+  <style>
+    .container {
+      margin-top: 5%;
+      margin-left: auto; 
+      margin-right: auto;
+
+      width: 240px; 
+      height: 240px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="ttt-game" class="ttt-board">
+      <div class="ttt-row">
+        <div class="ttt-box"></div>
+        <div class="ttt-box"></div>
+        <div class="ttt-box"></div>
+      </div>
+      <div class="ttt-row">
+        <div class="ttt-box"></div>
+        <div class="ttt-box"></div>
+        <div class="ttt-box"></div>
+      </div>
+      <div class="ttt-row">
+        <div class="ttt-box"></div>
+        <div class="ttt-box"></div>
+        <div class="ttt-box"></div>
+      </div>
+    </div>
+    <center><h1 id="points">H 0 : 0 C</h1></center>
+  </div>
+
+  <script src="tictactoe.min.js"></script>
+  <script>
+    const ttt = new TicTacToe('#ttt-game');
+    ttt.setWinListener(p => alert(`Player "${p}" WINS!`));
+    ttt.setDrawListener(() => alert('Draw!'));
+
+    const points = document.getElementById('points');
+    ttt.setPointsListener((h, c) => {
+      points.innerText = `H ${h} : ${c} C`;
+    });
+    
+  </script>
+
+</body>
+</html>
