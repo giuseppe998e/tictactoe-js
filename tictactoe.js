@@ -246,14 +246,6 @@ const TicTacToe = function(boardId) {
     // Reset Board state
     boardState = Array(9).fill(PLAYER.Blank)
 
-    // Reset Points
-    humanWins = 0
-    computerWins = 0
-
-    if ('function' == typeof pointsHandler) {
-      pointsHandler(humanWins, computerWins)
-    }
-
     // Reset UI Board
     UI_BOARD.forEach(item => item.classList.remove('human', 'computer'))
 
@@ -272,8 +264,16 @@ const TicTacToe = function(boardId) {
     }
 
     difficulty = d
+
+    // Reset Points
+    humanWins = 0
+    computerWins = 0
     playerTurn = PLAYER.Human
-    
+
+    if ('function' == typeof pointsHandler) {
+      pointsHandler(humanWins, computerWins)
+    }
+
     INSTANCE.init()
   }
 
