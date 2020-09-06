@@ -73,11 +73,11 @@ const TicTacToe = function(boardId) {
           computerWins += 1
         }
     
-        if (typeof winHandler == 'function') {
+        if ('function' == typeof winHandler) {
           winHandler(playerTurn == PLAYER.Human ? 'Human' : 'Computer')
         }
     
-        if (typeof pointsHandler == 'function') {
+        if ('function' == typeof pointsHandler) {
           pointsHandler(humanWins, computerWins)
         }
       }
@@ -85,7 +85,7 @@ const TicTacToe = function(boardId) {
       else if (isDraw) {
         console.log('DRAW!')
 
-        if (typeof drawHandler == 'function') {
+        if ('function' == typeof drawHandler) {
           drawHandler()
         }
       }
@@ -113,10 +113,8 @@ const TicTacToe = function(boardId) {
           break
       }
   
-      if (markBox(move)) {
-        if (!matchHandler()) {
+      if (markBox(move) && !matchHandler()) {
           playerTurn = PLAYER.Human
-        }
       }
     }
   }
@@ -139,7 +137,6 @@ const TicTacToe = function(boardId) {
         clonedBoard[x] = PLAYER.Computer
 
         const nextMoveScore = -calcMiniMax(clonedBoard, PLAYER.Human)
-  
         if (nextMoveScore > score) {
           score = nextMoveScore
           move = x
@@ -160,17 +157,15 @@ const TicTacToe = function(boardId) {
     let move = -1
 
     for (let x = 0; x < board.length; x++) {
-      if (!isBlankBox(x, board)) {
-        continue
-      }
-      
-      const clonedBoard = board.slice()
-      clonedBoard[x] = player
+      if (isBlankBox(x, board)) {
+        const clonedBoard = board.slice()
+        clonedBoard[x] = player
 
-      const nextMoveScore = -calcMiniMax(clonedBoard, getOpponentFor(player))
-      if (nextMoveScore > score) {
-        score = nextMoveScore
-        move = x
+        const nextMoveScore = -calcMiniMax(clonedBoard, getOpponentFor(player))
+        if (nextMoveScore > score) {
+            score = nextMoveScore
+            move = x
+        } 
       }
     }
 
@@ -190,12 +185,11 @@ const TicTacToe = function(boardId) {
       if (isHumanTurn()) {
         boardState[index] = PLAYER.Human
         UI_BOARD[index].classList.add('human')
-        return true
       } else {
         boardState[index] = PLAYER.Computer
         UI_BOARD[index].classList.add('computer')
-        return true
       }
+      return true
     }
 
     return false
@@ -219,12 +213,10 @@ const TicTacToe = function(boardId) {
       const condition = WIN_CONDITIONS[x]
       const player = board[condition[0]]
 
-      if (player == PLAYER.Blank) {
-        continue
-      }
-
-      if (board[condition[1]] == player && board[condition[2]] == player) {
-        return player
+      if (player != PLAYER.Blank) {
+        if (board[condition[1]] == player && board[condition[2]] == player) {
+          return player
+        }
       }
     }
 
@@ -244,7 +236,7 @@ const TicTacToe = function(boardId) {
       throw `${player} is not a valid input!`
     }
 
-    return player * -1
+    return -1 * player
   }
 
   // ---------------------------------------------
@@ -255,9 +247,7 @@ const TicTacToe = function(boardId) {
     boardState = Array(9).fill(PLAYER.Blank)
 
     // Reset UI Board
-    UI_BOARD.forEach((item) => {
-      item.classList.remove('human', 'computer')
-    })
+    UI_BOARD.forEach(item => item.classList.remove('human', 'computer'))
 
     if (!isHumanTurn()) {
       computerTurn()
@@ -279,17 +269,14 @@ const TicTacToe = function(boardId) {
 
   INSTANCE.setWinHandler = fn => {
     winHandler = fn
-    return this
   }
 
   INSTANCE.setDrawHandler = fn => {
     drawHandler = fn
-    return this
   }
 
   INSTANCE.setPointsHandler = fn => {
     pointsHandler = fn
-    return this
   }
 
   // ---------------------------------------------
@@ -298,11 +285,9 @@ const TicTacToe = function(boardId) {
   UI_BOARD.forEach((item, index) => { // Bind boxes
     item.addEventListener('click', () => {
       if (isHumanTurn()) {
-        if (markBox(index)) {
-          if (!matchHandler()) {
-            playerTurn = PLAYER.Computer
-            computerTurn()
-          }
+        if (markBox(index) && !matchHandler()) {
+          playerTurn = PLAYER.Computer
+          computerTurn()
         }
       }
     }, false)
