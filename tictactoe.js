@@ -15,7 +15,7 @@
  * along with "TicTacToe.js". If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
+"use strict"
 
 const TicTacToe = function(boardId) {
   // ---------------------------------------------
@@ -246,6 +246,14 @@ const TicTacToe = function(boardId) {
     // Reset Board state
     boardState = Array(9).fill(PLAYER.Blank)
 
+    // Reset Points
+    humanWins = 0
+    computerWins = 0
+
+    if ('function' == typeof pointsHandler) {
+      pointsHandler(humanWins, computerWins)
+    }
+
     // Reset UI Board
     UI_BOARD.forEach(item => item.classList.remove('human', 'computer'))
 
@@ -264,6 +272,8 @@ const TicTacToe = function(boardId) {
     }
 
     difficulty = d
+    playerTurn = PLAYER.Human
+    
     INSTANCE.init()
   }
 
