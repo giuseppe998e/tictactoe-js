@@ -130,7 +130,7 @@ const TicTacToe = function(boardId) {
   const impossibleMode = () => {
     let bestScore = -2,
         bestMove  = -1
-
+    
     for (let x = 0; x < boardState.length; x++) {
       if (isBlankBox(x)) {
         const possibleBoard = getPossibleBoard(PLAYER.Computer, x)
@@ -176,8 +176,8 @@ const TicTacToe = function(boardId) {
     else if (player == PLAYER.Human) { // isMaximizingPlayer = False
       bestScore = +2
 
-    for (let x = 0; x < board.length; x++) {
-      if (isBlankBox(x, board)) {
+      for (let x = 0; x < board.length; x++) {
+        if (isBlankBox(x, board)) {
           const possibleBoard = getPossibleBoard(player, x, board)
           const possibleScore = calcAlphaBetaPrunning(possibleBoard, PLAYER.Computer, alpha, beta)
 
@@ -187,12 +187,12 @@ const TicTacToe = function(boardId) {
           if (beta <= alpha) {
             break
           }
-        } 
+        }
       }
     }
 
     return Math.abs(bestScore) < 2 ? bestScore : 0;
-    }
+  }
 
   const getPossibleBoard = (player, position, board = boardState) => {
     const possibleBoard = board.slice()
@@ -253,14 +253,6 @@ const TicTacToe = function(boardId) {
 
   const isHumanTurn = () => {
     return playerTurn == PLAYER.Human
-  }
-
-  const getOpponentFor = (player = playerTurn) => {
-    if (player !== 1 && player !== -1) {
-      throw `${player} is not a valid input!`
-    }
-
-    return -1 * player
   }
 
   // ---------------------------------------------
