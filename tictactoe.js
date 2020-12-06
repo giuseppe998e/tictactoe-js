@@ -184,7 +184,7 @@ const TicTacToe = function(boardId) {
           const possibleScore = calcAlphaBetaPrunning(possibleBoard, PLAYER.Computer, alpha, beta)
 
           bestScore = Math.min(bestScore, possibleScore)
-          beta  = Math.min(beta, bestScore)
+          beta = Math.min(beta, bestScore)
 
           if (beta <= alpha) {
             break
