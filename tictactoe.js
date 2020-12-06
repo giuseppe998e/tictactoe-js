@@ -163,7 +163,7 @@ const TicTacToe = function(boardId) {
       }
     }
 
-    return isFinite(score) ? score : 0
+    return Math.abs(bestScore) < 2 ? score : 0
   }
 
   const getPossibleBoard = (player, position, board = boardState) => {
