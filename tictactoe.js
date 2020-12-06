@@ -128,52 +128,76 @@ const TicTacToe = function(boardId) {
   }
 
   const impossibleMode = () => {
-    let score = -2
-    let move = -1
+    let bestScore = -2,
+        bestMove  = -1
 
     for (let x = 0; x < boardState.length; x++) {
       if (isBlankBox(x)) {
-        const clonedBoard = boardState.slice()
-        clonedBoard[x] = PLAYER.Computer
+        const possibleBoard = getPossibleBoard(PLAYER.Computer, x)
+        const possibleScore = calcAlphaBetaPrunning(possibleBoard, PLAYER.Human, -2, +2)
 
-        const nextMoveScore = -calcMiniMax(clonedBoard, PLAYER.Human)
-        if (nextMoveScore > score) {
-          score = nextMoveScore
-          move = x
+        if (bestScore < possibleScore) {
+          bestScore = possibleScore
+          bestMove = x
         }
       }
     }
 
-    return move
+    return bestMove
   }
 
-  const calcMiniMax = (board, player) => {
+  const calcAlphaBetaPrunning = (board, player, alpha /*Computer*/, beta /*Human*/) => {
     const winner = getWinner(board)
     if (winner !== false) {
-      return winner * player
+      return winner * player // Heuristic Node Value
     }
 
-    let score = -2
-    let move = -1
+    let bestScore = null
+
+    // Maximizing Alpha
+    if (player == PLAYER.Computer) { // isMaximizingPlayer = True
+      bestScore = -2
+
+      for (let x = 0; x < board.length; x++) { 
+        if (isBlankBox(x, board)) {
+          const possibleBoard = getPossibleBoard(player, x, board)
+          const possibleScore = calcAlphaBetaPrunning(possibleBoard, PLAYER.Human, alpha, beta)
+
+          bestScore = Math.max(bestScore, possibleScore)
+          alpha = Math.max(alpha, bestScore)
+
+          if (beta <= alpha) {
+            break
+          }
+        }
+      }
+    }
+    // Minimizing Beta
+    else if (player == PLAYER.Human) { // isMaximizingPlayer = False
+      bestScore = +2
 
     for (let x = 0; x < board.length; x++) {
       if (isBlankBox(x, board)) {
-        const clonedBoard = board.slice()
-        clonedBoard[x] = player
+          const possibleBoard = getPossibleBoard(player, x, board)
+          const possibleScore = calcAlphaBetaPrunning(possibleBoard, PLAYER.Computer, alpha, beta)
 
-        const nextMoveScore = -calcMiniMax(clonedBoard, getOpponentFor(player))
-        if (nextMoveScore > score) {
-            score = nextMoveScore
-            move = x
+          bestScore = Math.min(bestScore, possibleScore)
+          beta  = Math.min(beta, bestScore)
+
+          if (beta <= alpha) {
+            break
+          }
         } 
       }
     }
 
-    if (move == -1) {
-      return 0 // Can't move ==> draw!
+    return Math.abs(bestScore) < 2 ? bestScore : 0;
     }
 
-    return score
+  const getPossibleBoard = (player, position, board = boardState) => {
+    const possibleBoard = board.slice()
+    possibleBoard[position] = player
+    return possibleBoard
   }
 
   const markBox = index => {
