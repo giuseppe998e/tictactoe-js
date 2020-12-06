@@ -128,17 +128,16 @@ const TicTacToe = function(boardId) {
   }
 
   const impossibleMode = () => {
-    let score = -2
-    let move = -1
+    let score = -Infinity,
+        move  = -1
 
     for (let x = 0; x < boardState.length; x++) {
       if (isBlankBox(x)) {
-        const clonedBoard = boardState.slice()
-        clonedBoard[x] = PLAYER.Computer
+        const possibleBoard = getPossibleBoard(PLAYER.Computer, x)
+        const possibleScore = -calcMiniMax(possibleBoard, PLAYER.Human)
 
-        const nextMoveScore = -calcMiniMax(clonedBoard, PLAYER.Human)
-        if (nextMoveScore > score) {
-          score = nextMoveScore
+        if (score < possibleScore) {
+          score = possibleScore
           move = x
         }
       }
@@ -153,27 +152,24 @@ const TicTacToe = function(boardId) {
       return winner * player
     }
 
-    let score = -2
-    let move = -1
+    let score = -Infinity
 
     for (let x = 0; x < board.length; x++) {
       if (isBlankBox(x, board)) {
-        const clonedBoard = board.slice()
-        clonedBoard[x] = player
+        const possibleBoard = getPossibleBoard(player, x, board)
+        const possibleScore = -calcMiniMax(possibleBoard, getOpponentFor(player))
 
-        const nextMoveScore = -calcMiniMax(clonedBoard, getOpponentFor(player))
-        if (nextMoveScore > score) {
-            score = nextMoveScore
-            move = x
-        } 
+        score = Math.max(score, possibleScore)
       }
     }
 
-    if (move == -1) {
-      return 0 // Can't move ==> draw!
-    }
+    return isFinite(score) ? score : 0
+  }
 
-    return score
+  const getPossibleBoard = (player, position, board = boardState) => {
+    const possibleBoard = board.slice()
+    possibleBoard[position] = player
+    return possibleBoard
   }
 
   const markBox = index => {
