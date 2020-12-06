@@ -128,7 +128,7 @@ const TicTacToe = function(boardId) {
   }
 
   const impossibleMode = () => {
-    let score = -Infinity,
+    let score = -2,
         move  = -1
 
     for (let x = 0; x < boardState.length; x++) {
@@ -152,7 +152,7 @@ const TicTacToe = function(boardId) {
       return winner * player
     }
 
-    let score = -Infinity
+    let score = -2
 
     for (let x = 0; x < board.length; x++) {
       if (isBlankBox(x, board)) {
