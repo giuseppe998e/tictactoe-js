@@ -136,6 +136,8 @@ const TicTacToe = function(boardId) {
         const possibleBoard = getPossibleBoard(PLAYER.Computer, x)
         const possibleScore = calcAlphaBetaPrunning(possibleBoard, PLAYER.Human, -2, +2)
 
+        console.log(`SCORE: ${bestScore} | POSSIBLE: ${possibleScore}`)
+
         if (bestScore < possibleScore) {
           bestScore = possibleScore
           bestMove = x
