@@ -151,6 +151,7 @@ const TicTacToe = function(boardId) {
   const calcAlphaBetaPrunning = (board, player, alpha /*Computer*/, beta /*Human*/) => {
     const winner = getWinner(board)
     if (winner !== false) {
+      console.log(winner * player)
       return winner * player // Heuristic Node Value
     }
 
@@ -159,6 +160,10 @@ const TicTacToe = function(boardId) {
     // Maximizing Alpha
     if (player == PLAYER.Computer) { // isMaximizingPlayer = True
       bestScore = -2
+
+      while (nextBlankBox(x, board) !== -1)
+
+
 
       for (let x = 0; x < board.length; x++) { 
         if (isBlankBox(x, board)) {
@@ -192,7 +197,7 @@ const TicTacToe = function(boardId) {
         }
       }
     }
-
+    
     return Math.abs(bestScore) < 2 ? bestScore : 0;
   }
 
@@ -247,6 +252,13 @@ const TicTacToe = function(boardId) {
     }
 
     return false
+  }
+
+  const nextBlankBox = (from = -1, board = boardState) => {
+    const index = from + 1
+    if (index >= board.length) return false
+    if (board[index] === 0) return index
+    return nextBlank(index + 1)
   }
 
   const isBlankBox = (index, board = boardState) => {
